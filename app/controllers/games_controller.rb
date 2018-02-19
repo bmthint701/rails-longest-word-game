@@ -11,17 +11,24 @@ class GamesController < ApplicationController
   end
 
   def score
+    @score = session[:score] || 0
     @letters = params[:letters].split('')
     @answer = params[:answer].split('')
     @response = check_answer(@answer, @letters)
-    # raise
+    if @response[0] == "C"
+      session[:score] = @score + @answer.length
+    else
+      session[:score] = @score
+    end
   end
 
   def check_answer(answer_array, letters_array)
+    test_array = []
+    letters_array.each{|e| test_array << e.dup}
     exist = "Congratulations! #{answer_array.join('')} is a valid English word"
     wrong = "Sorry but #{answer_array.join('')} does not seem to be a valid English word"
     answer_array.each do |letter|
-      if letters_array.reject! { |e| e == letter.downcase }.nil?
+      if test_array.reject! { |e| e == letter.downcase }.nil?
         return "Sorry but #{answer_array.join('')} can't be built out of #{letters_array.join(', ')}"
       end
     end
