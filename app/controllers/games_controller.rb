@@ -20,11 +20,12 @@ class GamesController < ApplicationController
     else
       session[:score] = @score
     end
+    @current_score = session[:score]
   end
 
   def check_answer(answer_array, letters_array)
     test_array = []
-    letters_array.each{|e| test_array << e.dup}
+    letters_array.each { |e| test_array << e.dup }
     exist = "Congratulations! #{answer_array.join('')} is a valid English word"
     wrong = "Sorry but #{answer_array.join('')} does not seem to be a valid English word"
     answer_array.each do |letter|
